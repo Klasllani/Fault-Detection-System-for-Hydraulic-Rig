@@ -1,0 +1,3 @@
+READ THIS FOR RUNNING
+
+You need to download the data set and put the folder (same name as this) with its ~18 text files to this directory
