@@ -4,50 +4,117 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Fault Detection System</title>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
 </head>
 <body>
     <div class="container">
         <h1>Fault Detection System for Hydraulic Rig</h1>
+        
+        <div id="train-section">
+            <button id="train-button">Train Model</button>
+            <div id="train-status"></div>
+        </div>
+        
         <form id="monitor-form">
-            <label for="ps1">PS1 (Pressure, bar):</label>
-            <input type="text" id="ps1" name="ps1"><br>
-            <label for="ps2">PS2 (Pressure, bar):</label>
-            <input type="text" id="ps2" name="ps2"><br>
-            <label for="ps3">PS3 (Pressure, bar):</label>
-            <input type="text" id="ps3" name="ps3"><br>
-            <label for="ps4">PS4 (Pressure, bar):</label>
-            <input type="text" id="ps4" name="ps4"><br>
-            <label for="ps5">PS5 (Pressure, bar):</label>
-            <input type="text" id="ps5" name="ps5"><br>
-            <label for="ps6">PS6 (Pressure, bar):</label>
-            <input type="text" id="ps6" name="ps6"><br>
-            <label for="eps1">EPS1 (Motor Power, W):</label>
-            <input type="text" id="eps1" name="eps1"><br>
-            <label for="fs1">FS1 (Volume Flow, l/min):</label>
-            <input type="text" id="fs1" name="fs1"><br>
-            <label for="fs2">FS2 (Volume Flow, l/min):</label>
-            <input type="text" id="fs2" name="fs2"><br>
-            <label for="ts1">TS1 (Temperature, °C):</label>
-            <input type="text" id="ts1" name="ts1"><br>
-            <label for="ts2">TS2 (Temperature, °C):</label>
-            <input type="text" id="ts2" name="ts2"><br>
-            <label for="ts3">TS3 (Temperature, °C):</label>
-            <input type="text" id="ts3" name="ts3"><br>
-            <label for="ts4">TS4 (Temperature, °C):</label>
-            <input type="text" id="ts4" name="ts4"><br>
-            <label for="vs1">VS1 (Vibration, mm/s):</label>
-            <input type="text" id="vs1" name="vs1"><br>
-            <label for="ce">CE (Cooling Efficiency, %):</label>
-            <input type="text" id="ce" name="ce"><br>
-            <label for="cp">CP (Cooling Power, kW):</label>
-            <input type="text" id="cp" name="cp"><br>
-            <label for="se">SE (Efficiency Factor, %):</label>
-            <input type="text" id="se" name="se"><br>
-            <button type="submit">Monitor</button>
+            <div class="form-grid">
+                <div class="form-group">
+                    <label for="ps1">PS1 (Pressure, bar):</label>
+                    <input type="text" id="ps1" name="PS1" placeholder="100.0">
+                </div>
+                
+                <div class="form-group">
+                    <label for="ps2">PS2 (Pressure, bar):</label>
+                    <input type="text" id="ps2" name="PS2" placeholder="200.0">
+                </div>
+                
+                <div class="form-group">
+                    <label for="ps3">PS3 (Pressure, bar):</label>
+                    <input type="text" id="ps3" name="PS3" placeholder="100.0">
+                </div>
+                
+                <div class="form-group">
+                    <label for="ps4">PS4 (Pressure, bar):</label>
+                    <input type="text" id="ps4" name="PS4" placeholder="100.0">
+                </div>
+                
+                <div class="form-group">
+                    <label for="ps5">PS5 (Pressure, bar):</label>
+                    <input type="text" id="ps5" name="PS5" placeholder="100.0">
+                </div>
+                
+                <div class="form-group">
+                    <label for="ps6">PS6 (Pressure, bar):</label>
+                    <input type="text" id="ps6" name="PS6" placeholder="100.0">
+                </div>
+                
+                <div class="form-group">
+                    <label for="eps1">EPS1 (Motor Power, W):</label>
+                    <input type="text" id="eps1" name="EPS1" placeholder="2400.0">
+                </div>
+                
+                <div class="form-group">
+                    <label for="fs1">FS1 (Volume Flow, l/min):</label>
+                    <input type="text" id="fs1" name="FS1" placeholder="60.0">
+                </div>
+                
+                <div class="form-group">
+                    <label for="fs2">FS2 (Volume Flow, l/min):</label>
+                    <input type="text" id="fs2" name="FS2" placeholder="60.0">
+                </div>
+                
+                <div class="form-group">
+                    <label for="ts1">TS1 (Temperature, °C):</label>
+                    <input type="text" id="ts1" name="TS1" placeholder="35.0">
+                </div>
+                
+                <div class="form-group">
+                    <label for="ts2">TS2 (Temperature, °C):</label>
+                    <input type="text" id="ts2" name="TS2" placeholder="45.0">
+                </div>
+                
+                <div class="form-group">
+                    <label for="ts3">TS3 (Temperature, °C):</label>
+                    <input type="text" id="ts3" name="TS3" placeholder="40.0">
+                </div>
+                
+                <div class="form-group">
+                    <label for="ts4">TS4 (Temperature, °C):</label>
+                    <input type="text" id="ts4" name="TS4" placeholder="38.0">
+                </div>
+                
+                <div class="form-group">
+                    <label for="vs1">VS1 (Vibration, mm/s):</label>
+                    <input type="text" id="vs1" name="VS1" placeholder="0.5">
+                </div>
+                
+                <div class="form-group">
+                    <label for="ce">CE (Cooling Efficiency, %):</label>
+                    <input type="text" id="ce" name="CE" placeholder="95.0">
+                </div>
+                
+                <div class="form-group">
+                    <label for="cp">CP (Cooling Power, kW):</label>
+                    <input type="text" id="cp" name="CP" placeholder="2.0">
+                </div>
+                
+                <div class="form-group">
+                    <label for="se">SE (Efficiency Factor, %):</label>
+                    <input type="text" id="se" name="SE" placeholder="98.0">
+                </div>
+            </div>
+            
+            <button type="submit" id="monitor-button">Monitor System</button>
         </form>
-        <div id="result"></div>
+        
+        <div id="result-container">
+            <h2>Diagnostic Result</h2>
+            <div id="result">
+                <p>Results will appear here after submitting data.</p>
+            </div>
+        </div>
     </div>
+    
     <script src="{{ url_for('static', filename='js/script.js') }}"></script>
 </body>
 </html>
