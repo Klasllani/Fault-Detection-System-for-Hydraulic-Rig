@@ -10,4 +10,4 @@ After cloning the repo, download all required .txt files from the dataset linked
 Helwig, N., Pignanelli, E., & Schtze, A. (2015). Condition monitoring of hydraulic systems [Dataset]. UCI Machine Learning Repository. https://doi.org/10.24432/C5CW21.
 
 ## Acknowledgments
-I would like to acknowledge the UCI Machine Learning Repository and the authors of the dataset for providing the data used in this project. Proper credit should be given to the original authors and the repository when using this dataset for any purpose.
+I would like to acknowledge the UCI Machine Learning Repository and the creators of the dataset, Nikolai Helwig, Eliseo Pignanelli, and Andreas Schütze, for providing the data used in this project. Proper credit should be given to them when using this dataset for any purpose.
