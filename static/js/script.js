@@ -2,8 +2,9 @@
 document.addEventListener('DOMContentLoaded', function() {
     const trainButton = document.getElementById('train-button');
     const trainStatus = document.getElementById('train-status');
-    const monitorForm = document.getElementById('monitor-form');
+    const monitorButton = document.getElementById('monitor-button');
     const resultDiv = document.getElementById('result');
+    const sensorForm = document.getElementById('sensor-form');
     
     // Check if model is already trained
     fetch('/get_features')
@@ -18,6 +19,7 @@ document.addEventListener('DOMContentLoaded', function() {
         })
         .catch(error => {
             console.error('Error checking model status:', error);
+            trainStatus.innerHTML = '<p class="error">Error checking model status: ' + error.message + '</p>';
         });
     
     // Train button click event
@@ -36,40 +38,53 @@ document.addEventListener('DOMContentLoaded', function() {
                 }
             })
             .catch(error => {
-                trainStatus.innerHTML = `<p class="error">Training failed: ${error}</p>`;
+                trainStatus.innerHTML = `<p class="error">Training failed: ${error.message}</p>`;
                 console.error('Error:', error);
             });
     });
     
-    // Monitor form submission
-    monitorForm.addEventListener('submit', function(event) {
-        event.preventDefault();
+    // Monitor button click event
+    monitorButton.addEventListener('click', function(event) {
+        event.preventDefault(); // Prevent any default form submission behavior
         
-        // Collect form data
-        const formData = new FormData(monitorForm);
-        const data = {};
-        
-        // Convert form data to JavaScript object
-        for (const [key, value] of formData.entries()) {
-            if (value) {
-                data[key] = parseFloat(value);
-            } else {
-                data[key] = 0;
-            }
+        // Validate form
+        if (!sensorForm.checkValidity()) {
+            sensorForm.reportValidity();
+            resultDiv.innerHTML = '<p class="error">Please fill in all required fields with valid numbers.</p>';
+            return;
         }
         
-        // Send the data to the server
+        // Collect form data
+        const formData = new FormData(sensorForm);
+        const sensorData = {};
+        let hasInvalidInput = false;
+        
+        formData.forEach((value, key) => {
+            const numValue = parseFloat(value);
+            if (isNaN(numValue)) {
+                hasInvalidInput = true;
+                return;
+            }
+            sensorData[key] = numValue;
+        });
+        
+        if (hasInvalidInput) {
+            resultDiv.innerHTML = '<p class="error">Invalid input: All sensor values must be valid numbers.</p>';
+            return;
+        }
+        
+        // Send the sensor data to the /monitor endpoint
         fetch('/monitor', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
             },
-            body: JSON.stringify(data)
+            body: JSON.stringify(sensorData)
         })
         .then(response => {
             if (!response.ok) {
                 return response.json().then(err => {
-                    throw new Error(err.error || 'Network response was not ok');
+                    throw new Error(err.error || 'Failed to process sensor data');
                 });
             }
             return response.json();
@@ -87,68 +102,90 @@ document.addEventListener('DOMContentLoaded', function() {
             }
         })
         .catch(error => {
-            resultDiv.innerHTML = `<p class="error">Error: ${error.message}</p>`;
+            resultDiv.innerHTML = `<p class="error">Error processing sensor data: ${error.message}</p>`;
             console.error('Error:', error);
         });
     });
     
     // Helper function to get severity level
     function getSeverityLevel(diagnosis) {
-        if (diagnosis.includes("close to total failure")) {
+        // Critical conditions
+        if (diagnosis.includes("Critical system failure")) {
             return "Critical";
-        } else if (diagnosis.includes("severe") || diagnosis.includes("severely")) {
+        } else if (diagnosis.includes("close to total failure")) {
+            return "Critical";
+        }
+        // High severity conditions
+        else if (diagnosis.includes("severe") || diagnosis.includes("severely")) {
             return "High";
-        } else if (diagnosis.includes("reduced") || diagnosis.includes("small lag") || diagnosis.includes("weak")) {
+        } else if (diagnosis.includes("might not be stable")) {
+            return "High";
+        }
+        // Medium severity conditions
+        else if (diagnosis.includes("reduced") || diagnosis.includes("small lag") || diagnosis.includes("weak")) {
             return "Medium";
-        } else if (diagnosis.includes("optimal") || diagnosis.includes("full efficiency") || diagnosis.includes("no leakage") || diagnosis.includes("stable")) {
+        } else if (diagnosis.includes("Mismatch")) {
+            return "Medium";
+        }
+        // Low severity conditions
+        else if (diagnosis.includes("optimal") || diagnosis.includes("full efficiency") || diagnosis.includes("no leakage") || diagnosis.includes("stable")) {
             return "Low";
-        } else {
+        }
+        // Unknown severity
+        else {
             return "Unknown";
         }
     }
     
     // Helper function to provide recommended actions
     function getRecommendedAction(diagnosis) {
-        if (diagnosis.includes("Cooler")) {
-            if (diagnosis.includes("close to total failure")) {
-                return "Replace cooling system immediately.";
-            } else if (diagnosis.includes("reduced efficiency")) {
-                return "Schedule maintenance for cooling system.";
-            } else {
-                return "Continue regular monitoring.";
-            }
-        } else if (diagnosis.includes("Valve")) {
-            if (diagnosis.includes("close to total failure")) {
-                return "Replace valve immediately.";
-            } else if (diagnosis.includes("severe lag")) {
-                return "Service valve urgently.";
-            } else if (diagnosis.includes("small lag")) {
-                return "Schedule valve inspection.";
-            } else {
-                return "Continue regular monitoring.";
-            }
-        } else if (diagnosis.includes("pump")) {
-            if (diagnosis.includes("severe leakage")) {
-                return "Replace pump seals immediately.";
-            } else if (diagnosis.includes("weak leakage")) {
-                return "Schedule pump maintenance.";
-            } else {
-                return "Continue regular monitoring.";
-            }
-        } else if (diagnosis.includes("accumulator")) {
-            if (diagnosis.includes("close to total failure")) {
-                return "Replace hydraulic accumulator immediately.";
-            } else if (diagnosis.includes("severely reduced")) {
-                return "Recharge or service accumulator urgently.";
-            } else if (diagnosis.includes("slightly reduced")) {
-                return "Schedule accumulator service.";
-            } else {
-                return "Continue regular monitoring.";
-            }
-        } else if (diagnosis.includes("stable")) {
-            return "All systems operating normally.";
-        } else {
-            return "Consult maintenance manual.";
+        // Critical conditions
+        if (diagnosis.includes("Critical system failure")) {
+            return "Shut down the system immediately, inspect all components, and check for overpressure or overheating issues.";
+        } else if (diagnosis.includes("Cooler close to total failure")) {
+            return "Shut down the system and replace the cooling system immediately to prevent overheating.";
+        } else if (diagnosis.includes("Valve close to total failure")) {
+            return "Shut down the system and replace the valve immediately to restore proper flow and pressure.";
+        } else if (diagnosis.includes("Hydraulic accumulator close to total failure")) {
+            return "Shut down the system and replace the hydraulic accumulator immediately to prevent pressure loss.";
+        }
+        // High severity conditions
+        else if (diagnosis.includes("Valve severe lag")) {
+            return "Schedule an urgent valve service to prevent potential failure; monitor pressure and flow closely.";
+        } else if (diagnosis.includes("Internal pump severe leakage")) {
+            return "Schedule an urgent pump repair to replace seals and prevent further leakage; monitor pressure and motor power.";
+        } else if (diagnosis.includes("Hydraulic accumulator severely reduced pressure")) {
+            return "Schedule an urgent accumulator recharge or replacement; monitor pressure and vibration levels.";
+        } else if (diagnosis.includes("Conditions might not be stable")) {
+            return "Investigate potential instability causes, such as high vibration or low efficiency, and schedule a system inspection.";
+        }
+        // Medium severity conditions
+        else if (diagnosis.includes("Cooler reduced efficiency")) {
+            return "Schedule maintenance for the cooling system to improve efficiency; monitor temperatures closely.";
+        } else if (diagnosis.includes("Valve small lag")) {
+            return "Schedule a valve inspection to address the lag; monitor pressure and flow for any changes.";
+        } else if (diagnosis.includes("Internal pump weak leakage")) {
+            return "Schedule pump maintenance to address the leakage; monitor pressure and motor power for worsening conditions.";
+        } else if (diagnosis.includes("Hydraulic accumulator slightly reduced pressure")) {
+            return "Schedule an accumulator service to restore pressure; monitor pressure and vibration levels.";
+        } else if (diagnosis.includes("Mismatch: Sensor values do not indicate a total failure")) {
+            return "Review sensor data for inconsistencies and verify the system's actual condition; schedule a diagnostic check.";
+        }
+        // Low severity conditions
+        else if (diagnosis.includes("Cooler full efficiency")) {
+            return "Continue regular monitoring; cooling system is operating normally.";
+        } else if (diagnosis.includes("Valve optimal switching behavior")) {
+            return "Continue regular monitoring; valve is operating normally.";
+        } else if (diagnosis.includes("Internal pump no leakage")) {
+            return "Continue regular monitoring; pump is operating normally.";
+        } else if (diagnosis.includes("Hydraulic accumulator optimal pressure")) {
+            return "Continue regular monitoring; accumulator is operating normally.";
+        } else if (diagnosis.includes("Conditions were stable")) {
+            return "Continue regular monitoring; system is stable and operating normally.";
+        }
+        // Unknown fault
+        else {
+            return "Consult the maintenance manual for further diagnosis and troubleshooting steps.";
         }
     }
 });

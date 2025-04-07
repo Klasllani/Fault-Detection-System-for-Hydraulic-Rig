@@ -48,40 +48,41 @@ h2 {
     background: rgba(255, 102, 0, 0.1);
 }
 
-.form-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-    gap: 20px;
+#sensor-input {
     margin-bottom: 30px;
-}
-
-.form-group {
-    text-align: left;
-}
-
-label {
-    display: block;
-    margin-bottom: 8px;
-    font-size: 1em;
-    color: #00ffcc;
-}
-
-input {
-    padding: 10px;
-    width: 100%;
+    padding: 15px;
     border: 2px solid #00ffcc;
-    background: #1a1a1a;
-    color: #00ffcc;
-    font-family: 'Orbitron', sans-serif;
-    font-size: 1em;
-    border-radius: 5px;
-    box-sizing: border-box;
+    border-radius: 10px;
+    background: rgba(0, 255, 204, 0.1);
 }
 
-input:focus {
+#sensor-form {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+    text-align: left;
+    margin-top: 15px;
+}
+
+#sensor-form label {
+    font-size: 1em;
+    color: #00ffcc;
+}
+
+#sensor-form input {
+    width: 100%;
+    padding: 5px;
+    background: rgba(255, 255, 255, 0.1);
+    border: 1px solid #00ffcc;
+    border-radius: 5px;
+    color: #fff;
+    font-family: 'Orbitron', sans-serif;
+}
+
+#sensor-form input:focus {
     outline: none;
     border-color: #ff6600;
-    box-shadow: 0 0 10px rgba(255, 102, 0, 0.5);
+    box-shadow: 0 0 5px rgba(255, 102, 0, 0.5);
 }
 
 button {
@@ -117,6 +118,14 @@ button:active {
 
 #train-button:hover {
     background: linear-gradient(45deg, #00ccff, #00ffcc);
+}
+
+#monitor-button {
+    background: linear-gradient(45deg, #ff6600, #ff3300);
+}
+
+#monitor-button:hover {
+    background: linear-gradient(45deg, #ff3300, #ff6600);
 }
 
 #result-container {
@@ -175,7 +184,7 @@ body::before {
 }
 
 @media (max-width: 768px) {
-    .form-grid {
+    #sensor-form {
         grid-template-columns: 1fr;
     }
     

@@ -16,96 +16,63 @@
             <div id="train-status"></div>
         </div>
         
-        <form id="monitor-form">
-            <div class="form-grid">
-                <div class="form-group">
-                    <label for="ps1">PS1 (Pressure, bar):</label>
-                    <input type="number" step="any" id="ps1" name="PS1" required>
-                </div>
-                
-                <div class="form-group">
-                    <label for="ps2">PS2 (Pressure, bar):</label>
-                    <input type="number" step="any" id="ps2" name="PS2" required>
-                </div>
-                
-                <div class="form-group">
-                    <label for="ps3">PS3 (Pressure, bar):</label>
-                    <input type="number" step="any" id="ps3" name="PS3" required>
-                </div>
-                
-                <div class="form-group">
-                    <label for="ps4">PS4 (Pressure, bar):</label>
-                    <input type="number" step="any" id="ps4" name="PS4" required>
-                </div>
-                
-                <div class="form-group">
-                    <label for="ps5">PS5 (Pressure, bar):</label>
-                    <input type="number" step="any" id="ps5" name="PS5" required>
-                </div>
-                
-                <div class="form-group">
-                    <label for="ps6">PS6 (Pressure, bar):</label>
-                    <input type="number" step="any" id="ps6" name="PS6" required>
-                </div>
-                
-                <div class="form-group">
-                    <label for="eps1">EPS1 (Motor Power, W):</label>
-                    <input type="number" step="any" id="eps1" name="EPS1" required>
-                </div>
-                
-                <div class="form-group">
-                    <label for="fs1">FS1 (Volume Flow, l/min):</label>
-                    <input type="number" step="any" id="fs1" name="FS1" required>
-                </div>
-                
-                <div class="form-group">
-                    <label for="fs2">FS2 (Volume Flow, l/min):</label>
-                    <input type="number" step="any" id="fs2" name="FS2" required>
-                </div>
-                
-                <div class="form-group">
-                    <label for="ts1">TS1 (Temperature, °C):</label>
-                    <input type="number" step="any" id="ts1" name="TS1" required>
-                </div>
-                
-                <div class="form-group">
-                    <label for="ts2">TS2 (Temperature, °C):</label>
-                    <input type="number" step="any" id="ts2" name="TS2" required>
-                </div>
-                
-                <div class="form-group">
-                    <label for="ts3">TS3 (Temperature, °C):</label>
-                    <input type="number" step="any" id="ts3" name="TS3" required>
-                </div>
-                
-                <div class="form-group">
-                    <label for="ts4">TS4 (Temperature, °C):</label>
-                    <input type="number" step="any" id="ts4" name="TS4" required>
-                </div>
-                
-                <div class="form-group">
-                    <label for="vs1">VS1 (Vibration, mm/s):</label>
-                    <input type="number" step="any" id="vs1" name="VS1" required>
-                </div>
-                
-                <div class="form-group">
-                    <label for="ce">CE (Cooling Efficiency, %):</label>
-                    <input type="number" step="any" id="ce" name="CE" required>
-                </div>
-                
-                <div class="form-group">
-                    <label for="cp">CP (Cooling Power, kW):</label>
-                    <input type="number" step="any" id="cp" name="CP" required>
-                </div>
-                
-                <div class="form-group">
-                    <label for="se">SE (Efficiency Factor, %):</label>
-                    <input type="number" step="any" id="se" name="SE" required>
-                </div>
-            </div>
-            
-            <button type="submit" id="monitor-button">Monitor System</button>
-        </form>
+        <div id="sensor-input">
+            <h2>Sensor Inputs</h2>
+            <form id="sensor-form">
+                <label for="PS1">PS1 (Pressure, bar):</label>
+                <input type="number" id="PS1" name="PS1" step="any" required><br>
+
+                <label for="PS2">PS2 (Pressure, bar):</label>
+                <input type="number" id="PS2" name="PS2" step="any" required><br>
+
+                <label for="PS3">PS3 (Pressure, bar):</label>
+                <input type="number" id="PS3" name="PS3" step="any" required><br>
+
+                <label for="PS4">PS4 (Pressure, bar):</label>
+                <input type="number" id="PS4" name="PS4" step="any" required><br>
+
+                <label for="PS5">PS5 (Pressure, bar):</label>
+                <input type="number" id="PS5" name="PS5" step="any" required><br>
+
+                <label for="PS6">PS6 (Pressure, bar):</label>
+                <input type="number" id="PS6" name="PS6" step="any" required><br>
+
+                <label for="EPS1">EPS1 (Motor Power, W):</label>
+                <input type="number" id="EPS1" name="EPS1" step="any" required><br>
+
+                <label for="FS1">FS1 (Volume Flow, l/min):</label>
+                <input type="number" id="FS1" name="FS1" step="any" required><br>
+
+                <label for="FS2">FS2 (Volume Flow, l/min):</label>
+                <input type="number" id="FS2" name="FS2" step="any" required><br>
+
+                <label for="TS1">TS1 (Temperature, °C):</label>
+                <input type="number" id="TS1" name="TS1" step="any" required><br>
+
+                <label for="TS2">TS2 (Temperature, °C):</label>
+                <input type="number" id="TS2" name="TS2" step="any" required><br>
+
+                <label for="TS3">TS3 (Temperature, °C):</label>
+                <input type="number" id="TS3" name="TS3" step="any" required><br>
+
+                <label for="TS4">TS4 (Temperature, °C):</label>
+                <input type="number" id="TS4" name="TS4" step="any" required><br>
+
+                <label for="VS1">VS1 (Vibration, mm/s):</label>
+                <input type="number" id="VS1" name="VS1" step="any" required><br>
+
+                <label for="CE">CE (Cooling Efficiency, %):</label>
+                <input type="number" id="CE" name="CE" step="any" required><br>
+
+                <label for="CP">CP (Cooling Power, kW):</label>
+                <input type="number" id="CP" name="CP" step="any" required><br>
+
+                <label for="SE">SE (Efficiency Factor, %):</label>
+                <input type="number" id="SE" name="SE" step="any" required><br>
+            </form>
+        </div>
+        
+        <button id="monitor-button">Monitor System</button>
         
         <div id="result-container">
             <h2>Diagnostic Result</h2>
