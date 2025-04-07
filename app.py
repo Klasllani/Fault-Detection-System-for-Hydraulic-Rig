@@ -49,8 +49,10 @@ def train():
         with open('static/feature_names.json', 'w') as f:
             json.dump(feature_names, f)
             
-        # Target is a combination of the 5 condition columns
-        y = data.iloc[:, -5:].idxmax(axis=1)
+        # Target: Create labels by combining component name and condition value
+        profile_cols = ['cooler', 'valve', 'pump', 'accumulator', 'stable']
+        # Find the column with the maximum value and create the label
+        y = data[profile_cols].apply(lambda row: f"{row.idxmax()}_{row[row.idxmax()]}", axis=1)
 
         # Preprocess data
         X_normalized, scaler = preprocess_data(X)
@@ -118,7 +120,7 @@ def monitor():
         diagnosis = diagnose_fault(prediction)
         
         return jsonify({
-            'prediction': prediction,  # Keep as string, no int() conversion
+            'prediction': prediction,  # Already a string like 'accumulator_90'
             'confidence': float(confidence),
             'diagnosis': diagnosis
         })
