@@ -2,17 +2,6 @@ import numpy as np
 import pandas as pd
 
 def monitor_sensor_data(model, scaler, new_data):
-    """
-    Process new sensor data and make predictions
-    
-    Args:
-        model: Trained machine learning model
-        scaler: Fitted StandardScaler
-        new_data: DataFrame with new sensor readings
-        
-    Returns:
-        Tuple of (prediction, confidence)
-    """
     try:
         # Transform the data using the scaler
         normalized_new_data = scaler.transform(new_data)
@@ -30,15 +19,6 @@ def monitor_sensor_data(model, scaler, new_data):
         raise ValueError(f"Data structure mismatch: {str(e)}")
 
 def diagnose_fault(prediction):
-    """
-    Map numerical prediction to human-readable diagnosis
-    
-    Args:
-        prediction: Model prediction (string)
-        
-    Returns:
-        String with fault diagnosis
-    """
     fault_mapping = {
         'cooler_3': "Cooler close to total failure",
         'cooler_20': "Cooler reduced efficiency",
@@ -58,6 +38,4 @@ def diagnose_fault(prediction):
         'stable_1': "Conditions might not be stable"
     }
     
-    # Convert prediction to string if necessary
-    pred_str = str(prediction)
-    return fault_mapping.get(pred_str, "Unknown fault")
+    return fault_mapping.get(prediction, "Unknown fault")
