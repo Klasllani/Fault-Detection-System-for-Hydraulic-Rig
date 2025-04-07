@@ -51,7 +51,6 @@ def train():
             
         # Target: Create labels by combining component name and condition value
         profile_cols = ['cooler', 'valve', 'pump', 'accumulator', 'stable']
-        # Find the column with the maximum value and create the label
         y = data[profile_cols].apply(lambda row: f"{row.idxmax()}_{row[row.idxmax()]}", axis=1)
 
         # Preprocess data
@@ -117,10 +116,11 @@ def monitor():
         
         # Make prediction
         prediction, confidence = monitor_sensor_data(model, scaler, new_data)
-        diagnosis = diagnose_fault(prediction)
+        # Pass the sensor data to diagnose_fault for validation
+        diagnosis = diagnose_fault(prediction, sensor_data=input_data)
         
         return jsonify({
-            'prediction': prediction,  # Already a string like 'accumulator_90'
+            'prediction': prediction,
             'confidence': float(confidence),
             'diagnosis': diagnosis
         })
