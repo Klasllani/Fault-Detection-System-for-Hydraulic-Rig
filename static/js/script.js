@@ -1,12 +1,11 @@
 // Wait for DOM content to be fully loaded
 document.addEventListener('DOMContentLoaded', function() {
-    // Reference to the train button
     const trainButton = document.getElementById('train-button');
     const trainStatus = document.getElementById('train-status');
     const monitorForm = document.getElementById('monitor-form');
     const resultDiv = document.getElementById('result');
     
-    // First, check if model is already trained
+    // Check if model is already trained
     fetch('/get_features')
         .then(response => {
             if (response.ok) {
@@ -50,13 +49,11 @@ document.addEventListener('DOMContentLoaded', function() {
         const formData = new FormData(monitorForm);
         const data = {};
         
-        // Convert form data to JavaScript object with proper names
+        // Convert form data to JavaScript object
         for (const [key, value] of formData.entries()) {
-            // Use the name attribute directly to ensure matching with backend
             if (value) {
                 data[key] = parseFloat(value);
             } else {
-                // Provide default values if fields are empty
                 data[key] = 0;
             }
         }
@@ -71,18 +68,19 @@ document.addEventListener('DOMContentLoaded', function() {
         })
         .then(response => {
             if (!response.ok) {
-                throw new Error('Network response was not ok');
+                return response.json().then(err => {
+                    throw new Error(err.error || 'Network response was not ok');
+                });
             }
             return response.json();
         })
         .then(result => {
-            // Format the result for display
             if (result.error) {
                 resultDiv.innerHTML = `<p class="error">Error: ${result.error}</p>`;
             } else {
                 resultDiv.innerHTML = `
                     <p><strong>Fault Type:</strong> ${result.diagnosis}</p>
-                    <p><strong>Confidence:</strong> ${calculateConfidence(result.prediction)}%</p>
+                    <p><strong>Confidence:</strong> ${(result.confidence * 100).toFixed(2)}%</p>
                     <p><strong>Severity:</strong> ${getSeverityLevel(result.diagnosis)}</p>
                     <p><strong>Recommended Action:</strong> ${getRecommendedAction(result.diagnosis)}</p>
                 `;
@@ -94,24 +92,16 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     });
     
-    // Helper function to calculate a fake confidence level for UI purposes
-    function calculateConfidence(predictionCode) {
-        // This is just for display - in a real application you'd get this from the model
-        const baseConfidence = 85;
-        const randomFactor = Math.floor(Math.random() * 15);
-        return baseConfidence + randomFactor;
-    }
-    
     // Helper function to get severity level
     function getSeverityLevel(diagnosis) {
         if (diagnosis.includes("close to total failure")) {
-            return "Critical - Immediate Attention Required";
+            return "Critical";
         } else if (diagnosis.includes("severe") || diagnosis.includes("severely")) {
-            return "High - Urgent Attention Required";
+            return "High";
         } else if (diagnosis.includes("reduced") || diagnosis.includes("small lag") || diagnosis.includes("weak")) {
-            return "Medium - Monitoring Required";
+            return "Medium";
         } else if (diagnosis.includes("optimal") || diagnosis.includes("full efficiency") || diagnosis.includes("no leakage") || diagnosis.includes("stable")) {
-            return "Low - System Normal";
+            return "Low";
         } else {
             return "Unknown";
         }
@@ -119,46 +109,46 @@ document.addEventListener('DOMContentLoaded', function() {
     
     // Helper function to provide recommended actions
     function getRecommendedAction(diagnosis) {
-        if (diagnosis.includes("cooler")) {
+        if (diagnosis.includes("Cooler")) {
             if (diagnosis.includes("close to total failure")) {
-                return "Immediately replace cooling system. Shut down system to prevent damage.";
+                return "Replace cooling system immediately.";
             } else if (diagnosis.includes("reduced efficiency")) {
-                return "Schedule maintenance for cooling system. Check for blockages or coolant levels.";
+                return "Schedule maintenance for cooling system.";
             } else {
-                return "Continue regular monitoring of cooling system.";
+                return "Continue regular monitoring.";
             }
-        } else if (diagnosis.includes("valve")) {
+        } else if (diagnosis.includes("Valve")) {
             if (diagnosis.includes("close to total failure")) {
-                return "Replace valve immediately. Prepare for system shutdown.";
+                return "Replace valve immediately.";
             } else if (diagnosis.includes("severe lag")) {
-                return "Service valve urgently. Check for mechanical issues or control problems.";
+                return "Service valve urgently.";
             } else if (diagnosis.includes("small lag")) {
-                return "Schedule valve inspection at next maintenance interval.";
+                return "Schedule valve inspection.";
             } else {
-                return "Continue regular monitoring of valve operation.";
+                return "Continue regular monitoring.";
             }
         } else if (diagnosis.includes("pump")) {
             if (diagnosis.includes("severe leakage")) {
-                return "Replace pump seals immediately. Check for downstream contamination.";
+                return "Replace pump seals immediately.";
             } else if (diagnosis.includes("weak leakage")) {
-                return "Schedule pump maintenance within next 48 hours. Monitor fluid levels.";
+                return "Schedule pump maintenance.";
             } else {
-                return "Continue regular monitoring of pump performance.";
+                return "Continue regular monitoring.";
             }
         } else if (diagnosis.includes("accumulator")) {
             if (diagnosis.includes("close to total failure")) {
-                return "Replace hydraulic accumulator immediately. Check system pressure stability.";
+                return "Replace hydraulic accumulator immediately.";
             } else if (diagnosis.includes("severely reduced")) {
-                return "Recharge or service accumulator urgently. Check for leaks in the system.";
+                return "Recharge or service accumulator urgently.";
             } else if (diagnosis.includes("slightly reduced")) {
-                return "Schedule accumulator service at next maintenance interval.";
+                return "Schedule accumulator service.";
             } else {
-                return "Continue regular monitoring of accumulator pressure.";
+                return "Continue regular monitoring.";
             }
         } else if (diagnosis.includes("stable")) {
-            return "All systems operating normally. Continue regular monitoring schedule.";
+            return "All systems operating normally.";
         } else {
-            return "Consult maintenance manual for specific recommendations.";
+            return "Consult maintenance manual.";
         }
     }
 });
